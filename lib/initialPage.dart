@@ -1,9 +1,4 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
-// import 'static_map[1].dart';
-import 'package:mechanic_side/mech_login.dart';
-// import 'package:mechanic_side/login.dart';
 import 'package:mechanic_side/mech_login.dart';
 
 class WelcomePage extends StatelessWidget {
@@ -15,19 +10,14 @@ class WelcomePage extends StatelessWidget {
         children: [
           Expanded(
             flex: 3,
-            child: AnimatedContainer(
-              duration: Duration(seconds: 1), // Set animation duration
-              child: Container(
-                height: 20, // Reduced height
-                width: MediaQuery.of(context)
-                    .size
-                    .width, // Set width to match screen width
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle, // Make the container circular
-                  image: DecorationImage(
-                    image: NetworkImage(
-                        'assets/logo.jpg'), // Replace with your image URL
-                  ),
+            child: Container(
+              height: 200, // Set desired height
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: AssetImage('assets/logo.jpg'), // Use AssetImage for assets
+                  fit: BoxFit.contain, // Adjust the image fit as needed
                 ),
               ),
             ),
@@ -38,49 +28,37 @@ class WelcomePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.width *
-                      0.8, // Adjust button width based on screen width
+                  width: MediaQuery.of(context).size.width * 0.8,
                   child: ElevatedButton(
                     onPressed: () {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) =>
-                      //             LoginScreen(title: 'breakdown buddy')));
+                      // Add navigation logic for user login
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromRGBO(
-                          75, 57, 239, 0.911), // Set button background color
-                      padding: EdgeInsets.symmetric(
-                          vertical: 15), // Adjust vertical padding as needed
+                      backgroundColor: Color.fromRGBO(75, 57, 239, 0.911),
+                      padding: EdgeInsets.symmetric(vertical: 15),
                     ),
                     child: Text(
                       'Login as a User',
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white), // Set text color to white
+                      style: TextStyle(fontSize: 20, color: Colors.white),
                     ),
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width *
-                      0.8, // Adjust button width based on screen width
+                  width: MediaQuery.of(context).size.width * 0.8,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => MechLogin()));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MechLogin()),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromRGBO(
-                          75, 57, 239, 0.911), // Set button background color
-                      padding: EdgeInsets.symmetric(
-                          vertical: 15), // Adjust vertical padding as needed
+                      backgroundColor: Color.fromRGBO(75, 57, 239, 0.911),
+                      padding: EdgeInsets.symmetric(vertical: 15),
                     ),
                     child: Text(
                       'Login as a Mechanic',
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white), // Set text color to white
+                      style: TextStyle(fontSize: 20, color: Colors.white),
                     ),
                   ),
                 ),

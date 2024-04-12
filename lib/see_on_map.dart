@@ -17,7 +17,10 @@ class _SeeOnMapState extends State<SeeOnMap> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('See Location on Map'),
+        title: Text(
+          'See Location on Map',
+          style: TextStyle(color: Color.fromRGBO(75, 57, 239, 0.911)),
+        ),
       ),
       body: GoogleMap(
         onMapCreated: _onMapCreated,
@@ -71,21 +74,22 @@ class _SeeOnMapState extends State<SeeOnMap> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Location Details'),
+          title: Text('Location Details', style: TextStyle(color: Colors.white)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Latitude: $lat'),
-              Text('Longitude: $lng'),
+              Text('Latitude: $lat', style: TextStyle(color: Colors.white)),
+              Text('Longitude: $lng', style: TextStyle(color: Colors.white)),
             ],
           ),
+          backgroundColor: Color.fromRGBO(75, 57, 239, 0.911),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Close'),
+              child: Text('Close', style: TextStyle(color: Colors.white)),
             ),
           ],
         );
