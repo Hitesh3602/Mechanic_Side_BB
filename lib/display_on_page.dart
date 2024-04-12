@@ -1,8 +1,5 @@
-// database se location lekar TEXT ke form mai show kar rha hai yeh code
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mechanic_side/see_on_map.dart';
 
 class DisplayOnPage extends StatefulWidget {
   const DisplayOnPage({Key? key}) : super(key: key);
@@ -36,12 +33,9 @@ class _DisplayOnPageState extends State<DisplayOnPage> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SeeOnMap()),
-                );
+                _showLocationPopup();
               },
-              child: Text('See on Map'),
+              child: Text('Show Location Popup'),
             ),
           ],
         ),
@@ -67,5 +61,25 @@ class _DisplayOnPageState extends State<DisplayOnPage> {
         _locationText = 'Error fetching location: $error';
       });
     });
+  }
+
+  void _showLocationPopup() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Location Details'),
+          content: Text(_locationText),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

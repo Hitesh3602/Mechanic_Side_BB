@@ -12,7 +12,6 @@ class SeeOnMap extends StatefulWidget {
 class _SeeOnMapState extends State<SeeOnMap> {
   late GoogleMapController mapController;
   final Set<Marker> _markers = {};
-  bool _mechanicOnline = false;
 
   @override
   Widget build(BuildContext context) {
@@ -20,52 +19,13 @@ class _SeeOnMapState extends State<SeeOnMap> {
       appBar: AppBar(
         title: const Text('See Location on Map'),
       ),
-      body: Stack(
-        children: [
-          GoogleMap(
-            onMapCreated: _onMapCreated,
-            initialCameraPosition: const CameraPosition(
-              target: LatLng(20.5937, 78.9629), // India coordinates
-              zoom: 4.0,
-            ),
-            markers: _markers,
-          ),
-          if (!_mechanicOnline)
-            Container(
-              color: Colors.black
-                  .withOpacity(0.6), // Dark background color with opacity
-              width: double.infinity,
-              height: double.infinity,
-              child: Center(
-                child: Text(
-                  'Offline',
-                  style: TextStyle(color: Colors.white, fontSize: 24.0),
-                ),
-              ),
-            ),
-          Positioned(
-            top: 16,
-            right: 16,
-            child: ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  _mechanicOnline = !_mechanicOnline;
-                  if (!_mechanicOnline) {
-                    _removeMarkers();
-                    _fetchAndDisplayLocations();
-                  }
-                });
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: _mechanicOnline ? Colors.green : Colors.red,
-              ),
-              child: Text(
-                _mechanicOnline ? 'Online' : 'Offline',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
-        ],
+      body: GoogleMap(
+        onMapCreated: _onMapCreated,
+        initialCameraPosition: const CameraPosition(
+          target: LatLng(20.5937, 78.9629), // India coordinates
+          zoom: 4.0,
+        ),
+        markers: _markers,
       ),
     );
   }
@@ -74,9 +34,7 @@ class _SeeOnMapState extends State<SeeOnMap> {
     setState(() {
       mapController = controller;
     });
-    if (!_mechanicOnline) {
-      _fetchAndDisplayLocations();
-    }
+    _fetchAndDisplayLocations();
   }
 
   void _fetchAndDisplayLocations() {
@@ -87,28 +45,51 @@ class _SeeOnMapState extends State<SeeOnMap> {
       querySnapshot.docs.forEach((doc) {
         double lat = doc['latitude'].toDouble();
         double lng = doc['longitude'].toDouble();
-        print('Fetched location: $lat, $lng'); // Debug print
         _addMarker(lat, lng);
       });
+    }).catchError((error) {
+      print('Error fetching location: $error');
     });
   }
 
   void _addMarker(double lat, double lng) {
+    MarkerId markerId = MarkerId(lat.toString() + lng.toString());
+    Marker marker = Marker(
+      markerId: markerId,
+      position: LatLng(lat, lng),
+      onTap: () {
+        _showLocationPopup(lat, lng);
+      },
+    );
     setState(() {
-      _markers.add(
-        Marker(
-          markerId: MarkerId('$lat-$lng'),
-          position: LatLng(lat, lng),
-          icon: BitmapDescriptor.defaultMarkerWithHue(
-              BitmapDescriptor.hueRed), // Red marker
-        ),
-      );
+      _markers.add(marker);
     });
   }
 
-  void _removeMarkers() {
-    setState(() {
-      _markers.clear();
-    });
+  void _showLocationPopup(double lat, double lng) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Location Details'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Latitude: $lat'),
+              Text('Longitude: $lng'),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
